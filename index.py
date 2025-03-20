@@ -12,6 +12,7 @@ def vulnerable_query(user_input):
 
     cursor.execute("INSERT INTO users (username, password) VALUES ('user', 'userpass')")
     # Vulnerable SQL query
+    #
     query = f"SELECT * FROM users WHERE username = '{user_input}'"
     print(f"Executing query: {query}")
 
