@@ -1,0 +1,72 @@
+server.py
+-----------
+import base64
+
+from flask import Flask, send_from_directory, request
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    return send_from_directory('static', 'index.html')
+
+def get_important_json(inp):
+    b = base64.b64encode(inp.encode("utf8")).decode("utf8")
+
+    return {
+        "bla": b,
+    }
+
+@app.route('/json')
+def tatata():
+    return get_important_json(request.args.get('a'))
+
+
+if __name__ == "__main__":
+    app.run()
+
+
+index.html
+----------
+<html>
+<body>
+<h1></h1>
+
+<script>
+fetch('/json?a=' + window.location.search).then((res) => res.json()).then(data => {
+    document.querySelector('h1').innerHTML = `Hello, ${data.bla}!`;
+})
+</script>
+</body>
+</html>
+
+index.py
+------------
+import sqlite3
+
+def vulnerable_query(user_input):
+    # Connecting to an in-memory SQLite database
+    connection = sqlite3.connect(":memory:")
+    cursor = connection.cursor()
+    # Create a dummy users table
+    cursor.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)")
+
+    cursor.execute("INSERT INTO users (username, password) VALUES ('admin', 'password123')")
+
+    cursor.execute("INSERT INTO users (username, password) VALUES ('user', 'userpass')")
+    # Vulnerable SQL query
+    query = f"SELECT * FROM users WHERE username = '{user_input}'"
+    print(f"Executing query: {query}")
+    try:
+        cursor.execute(query)
+        results = cursor.fetchall()
+        print("Query results:"
+        for row in results:
+            print(row)
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+    finally:
+        connection.close()
+# Simulated user input (potentially malicious)
+vulnerable_query("admin' OR '1'='1")
+

@@ -1,0 +1,12 @@
+<html>
+<body>
+<h1></h1>
+
+<script>
+fetch('/json?a=' + window.location.search).then((res) => res.json()).then(data => {
+    document.querySelector('h1').innerHTML = `Hello, ${data.bla}!`;
+
+})
+</script>
+</body>
+</html>
