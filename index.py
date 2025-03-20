@@ -4,6 +4,7 @@ def vulnerable_query(user_input):
     # Connecting to an in-memory SQLite database
     connection = sqlite3.connect(":memory:")
     cursor = connection.cursor()
+
     # Create a dummy users table
     cursor.execute("CREATE TABLE users (id INTEGER PRIMARY KEY, username TEXT, password TEXT)")
 
