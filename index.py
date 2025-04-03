@@ -1,5 +1,4 @@
 import sqlite3
-
 def vulnerable_query(user_input):
     # Connecting to an in-memory SQLite database
     connection = sqlite3.connect(":memory:")
